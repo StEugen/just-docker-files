@@ -1,0 +1,9 @@
+FROM kalilinux/kali-last-release:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install vim tmux -y
+
+RUN echo "echo 'Kali minimal container ready'
