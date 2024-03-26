@@ -1,4 +1,4 @@
-FROM kali-last-release:latest
+FROM kalilinux/kali-last-release:latest
 
 ENV DEBIAN_FRONTEND noninteractive
 
