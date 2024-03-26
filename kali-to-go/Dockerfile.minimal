@@ -6,4 +6,4 @@ RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install vim tmux -y
 
-RUN echo "echo 'Kali minimal container ready'"
+RUN echo "Kali minimal container ready"
