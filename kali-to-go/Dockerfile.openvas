@@ -1,0 +1,21 @@
+FROM kalilinux/kali-last-release:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install vim tmux zsh curl strace ltrace wget gobuster zstd amass hydra git john -y
+RUN apt-get install gvm-setup
+RUN gvm-check-setup
+
+RUN sed -i 's|ExecStart=/usr/local/sbin/gsad --foreground --listen=127.0.0.1 --port=9392|ExecStart=/usr/local/sbin/gsad --foreground --listen=0.0.0.0 --port=9392|' /usr/lib/systemd/system/gsad.service \
+    && systemctl daemon-reload
+
+EXPOSE 9392
+
+RUN mkdir -p /ghost
+WORKDIR /ghost
+RUN git clone https://github.com/StEugen/linux-local-enumeration-script.git
+RUN git clone https://github.com/StEugen/LinEnum.git
+
+RUN echo "echo 'Kali ready'"
