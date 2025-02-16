@@ -7,8 +7,8 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install vim tmux zsh curl strace ltrace wget gobuster zstd amass hydra git john -y
 RUN apt-get install gvm -y
 RUN apt-get install openvas -y
-RUN gvm-setup
-RUN gvm-check-setup
+# RUN gvm-setup
+# RUN gvm-check-setup
 
 RUN sed -i 's|ExecStart=/usr/local/sbin/gsad --foreground --listen=127.0.0.1 --port=9392|ExecStart=/usr/local/sbin/gsad --foreground --listen=0.0.0.0 --port=9392|' /usr/lib/systemd/system/gsad.service \
     && systemctl daemon-reload
