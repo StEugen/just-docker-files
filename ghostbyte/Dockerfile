@@ -21,13 +21,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && gem install brakeman --no-document \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Amass
-RUN curl -sSL https://github.com/owasp-amass/amass/releases/latest/download/amass_linux_amd64.zip \
-    -o /tmp/amass.zip && \
-    unzip /tmp/amass.zip -d /tmp/amass && \
-    mv /tmp/amass/amass /usr/local/bin/ && \
-    chmod +x /usr/local/bin/amass && \
-    rm -rf /tmp/amass*
+# install brew 
+test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc 
+# Install amass 
+brew tap caffix/amass
+brew install amass
 
 # Install SecLists wordlists
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists.git /opt/SecLists && \
