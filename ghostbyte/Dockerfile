@@ -9,16 +9,30 @@ ENV PATH="/home/ghostbyte/.local/bin:${PATH}"
 # Create non-root user
 RUN useradd -ms /bin/bash ghostbyte
 
-# Update & install base tools and dependencies
+# Install OS tools, Python, and Ruby
 RUN apt-get update && apt-get install -y --no-install-recommends \
     vim tmux zsh curl wget strace ltrace git \
-    gobuster zstd amass hydra \
-    john metasploit-framework \
-    python3 python3-pip wordlists \
-    unzip ca-certificates gnupg2 gnupg software-properties-common \
-    ruby-full build-essential libssl-dev libffi-dev libxml2-dev libxslt1-dev \
-    && gem install brakeman --no-document \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    gobuster zstd hydra \
+    john \
+    python3 python3-pip \
+    ruby-full build-essential \
+    libssl-dev libffi-dev libxml2-dev libxslt1-dev \
+    unzip ca-certificates gnup2 software-properties-common \
+  && gem install brakeman --no-document \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Amass
+RUN curl -sSL https://github.com/owasp-amass/amass/releases/latest/download/amass_linux_amd64.zip \
+    -o /tmp/amass.zip && \
+    unzip /tmp/amass.zip -d /tmp/amass && \
+    mv /tmp/amass/amass /usr/local/bin/ && \
+    chmod +x /usr/local/bin/amass && \
+    rm -rf /tmp/amass*
+
+# Install SecLists wordlists
+RUN git clone --depth=1 https://github.com/danielmiessler/SecLists.git /opt/SecLists && \
+    chown -R ghostbyte:ghostbyte /opt/SecLists
+
 
 USER ghostbyte
 WORKDIR /home/ghostbyte
@@ -53,6 +67,11 @@ RUN curl -sSL https://github.com/aquasecurity/tfsec/releases/latest/download/tfs
 # Install yq (YAML CLI)
 RUN curl -sSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
     -o /usr/local/bin/yq && chmod +x /usr/local/bin/yq
+
+RUN curl https://raw.githubusercontent.com/StEugen/cybersamurai/refs/heads/main/scrap-code/.vimrc -o .vimrc 
+# Enum tools 
+RUN git clone https://github.com/StEugen/linux-local-enumeration-script.git
+RUN git clone https://github.com/StEugen/LinEnum.git
 
 RUN chsh -s /bin/zsh ghostbyte 
 ENTRYPOINT ["/bin/zsh"]
