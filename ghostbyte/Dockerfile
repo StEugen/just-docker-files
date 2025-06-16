@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-pip \
     ruby-full build-essential \
     libssl-dev libffi-dev libxml2-dev libxslt1-dev \
-    unzip ca-certificates gnup2 software-properties-common \
+    unzip ca-certificates software-properties-common \
   && gem install brakeman --no-document \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
