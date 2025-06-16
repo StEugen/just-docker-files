@@ -22,12 +22,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install brew 
-test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc 
+RUN test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+RUN test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+RUN echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc 
 # Install amass 
-brew tap caffix/amass
-brew install amass
+RUN brew tap caffix/amass
+RUN brew install amass
 
 # Install SecLists wordlists
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists.git /opt/SecLists && \
