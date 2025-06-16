@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get install vim tmux zsh curl strace ltrace wget gobuster zstd amass hydra git john metasploit-framework python3 python3-pip -y
+RUN apt-get install vim tmux zsh curl strace ltrace wget gobuster zstd amass hydra git john metasploit-framework python3 python3-pip wordlists -y
 RUN curl https://raw.githubusercontent.com/StEugen/cybersamurai/refs/heads/main/scrap-code/.vimrc -o /root/.vimrc 
 RUN mkdir -p /ghost
 WORKDIR /ghost 
