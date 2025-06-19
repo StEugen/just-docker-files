@@ -1,41 +1,53 @@
-FROM ubuntu:24.04
+######### Build Stage #########
+FROM ubuntu:24.04 AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
 
-SHELL ["/bin/bash", "-lc"]
-
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       curl git build-essential libtool pkg-config cmake python3-dev \
-      neovim wget ca-certificates \
-      cmake libjsoncpp-dev libwebsockets-dev \
+      wget ca-certificates \
+      libjsoncpp-dev libwebsockets-dev libjson-c-dev\
  && rm -rf /var/lib/apt/lists/*
 
-# Install Homebrew
+# Build ttyd
+RUN git clone https://github.com/tsl0922/ttyd.git /tmp/ttyd \
+ && mkdir /tmp/ttyd/build \
+ && cd /tmp/ttyd/build \
+ && cmake .. \
+ && make \
+ && make install
+
+# Download Neovim
+RUN curl -Lo /tmp/nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz \
+ && tar -C /tmp -xzf /tmp/nvim.tar.gz
+
+######### Runtime Stage #########
+FROM ubuntu:24.04 AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PATH="/usr/local/bin:${PATH}"
+
+# Install runtime dependencies
 RUN apt-get update \
- && apt-get install -y --no-install-recommends build-essential procps curl file git \
- && rm -rf /var/lib/apt/lists/* \
- && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
- && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile.d/homebrew.sh \
- && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+ && apt-get install -y --no-install-recommends \
+      ca-certificates libwebsockets-dev libjsoncpp-dev libjson-c-dev git python3 curl wget ca-certificates build-essential \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN echo >> /root/.bashrc \
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 
+# Copy ttyd binary
+COPY --from=builder /usr/local/bin/ttyd /usr/local/bin/ttyd
 
-RUN source /root/.bashrc
-
-RUN brew install ttyd 
-
-RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz \
-  && rm -rf /opt/nvim \
-  && tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+# Copy Neovim
+RUN rm -rf /opt/nvim
+COPY --from=builder /tmp/nvim-linux-x86_64 /opt/nvim
+ENV PATH="/opt/nvim/bin:${PATH}"
 
 RUN git clone https://github.com/LazyVim/starter ~/.config/nvim 
 
 WORKDIR /workspace
 
 EXPOSE 8080
+
 CMD ["ttyd", "-p", "8080", "-c", "${TTYD_USER:-user}:${TTYD_PASS:-pass}", "nvim", "-u", "/root/.config/nvim/init.lua"]
 
