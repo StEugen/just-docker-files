@@ -22,20 +22,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Homebrew
-RUN apt-get update \
- && apt-get install -y --no-install-recommends build-essential procps curl file git \
- && rm -rf /var/lib/apt/lists/* \
- && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
- && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile.d/homebrew.sh \
- && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+#RUN apt-get update \
+# && apt-get install -y --no-install-recommends build-essential procps curl file git \
+# && rm -rf /var/lib/apt/lists/* \
+# && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+# && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile.d/homebrew.sh \
+# && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-RUN echo >> /root/.bashrc \
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+#RUN echo >> /root/.bashrc \
+ #   echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
+#    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-# Now you can tap and install with brew
-RUN brew tap caffix/amass \
- && brew install amass
+#RUN brew tap caffix/amass \
+# && brew install amass
 
 # Install SecLists wordlists
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists.git /opt/SecLists && \

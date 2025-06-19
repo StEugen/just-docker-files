@@ -49,5 +49,6 @@ WORKDIR /workspace
 
 EXPOSE 8080
 
-CMD ["ttyd", "-p", "8080", "-c", "${TTYD_USER:-user}:${TTYD_PASS:-pass}", "nvim", "-u", "/root/.config/nvim/init.lua"]
+CMD ["ttyd", "-p", "8080", "-c", "user:pass", "bash"]
+
 
