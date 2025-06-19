@@ -29,6 +29,10 @@ RUN apt-get update \
  && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile.d/homebrew.sh \
  && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+RUN echo >> /root/.bashrc \
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 # Now you can tap and install with brew
 RUN brew tap caffix/amass \
  && brew install amass
