@@ -13,10 +13,15 @@ RUN apk update && \
       jq \
       git
 
-RUN curl https://go.dev/dl/go1.24.5.linux-amd64.tar.gz -O
-RUN  rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.5.linux-amd64.tar.gz \
-    export PATH=$PATH:/usr/local/go/bin \
-    go version
+
+RUN curl -L https://go.dev/dl/go1.24.5.linux-amd64.tar.gz -o go.tar.gz && \
+    rm -rf /usr/local/go && \
+    tar -xzf go.tar.gz -C /usr/local && \
+    rm go.tar.gz
+
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+RUN go version
 
 RUN go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 RUN go install github.com/OJ/gobuster/v3@latest
