@@ -10,12 +10,12 @@ RUN apk update && \
       vim \
       curl \
       nmap \
-      gobuster \
       jq \
       git \
       go
 
 RUN go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+RUN go install github.com/OJ/gobuster/v3@latest
 
 RUN pip3 install --no-cache-dir \
       dnspython \
