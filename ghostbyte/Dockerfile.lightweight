@@ -30,6 +30,6 @@ RUN pip3 install --no-cache-dir \
       dnspython \
       requests
 
-WORKDIR /tools
+WORKDIR /root/
 
 ENTRYPOINT ["sh"]
