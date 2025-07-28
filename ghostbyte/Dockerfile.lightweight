@@ -1,0 +1,26 @@
+FROM alpine:3.18
+
+LABEL mainteiner="steugen"
+LABEL description="GhostByte Lightweight: Lightweight DevSecOps Toolkit"
+
+RUN apk update && \
+    apk add --no-cache \
+      python3 \
+      py3-pip \
+      vim \
+      curl \
+      nmap \
+      gobuster \
+      jq \
+      git \
+      go
+
+RUN go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+
+RUN pip3 install --no-cache-dir \
+      dnspython \
+      requests
+
+WORKDIR /tools
+
+ENTRYPOINT ["sh"]

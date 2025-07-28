@@ -1,7 +1,7 @@
 FROM debian:12-slim
 
 LABEL mainteiner="steugen"
-LABEL description="GhostByte: Lightweight DevSecOps Toolkit"
+LABEL description="GhostByte: DevSecOps Toolkit"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/home/ghostbyte/.local/bin:${PATH}"
@@ -18,8 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ruby-full build-essential \
     libssl-dev libffi-dev libxml2-dev libxslt1-dev \
     unzip ca-certificates software-properties-common \
-  && gem install brakeman --no-document \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && gem install brakeman --no-document \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Homebrew
 #RUN apt-get update \
@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #RUN echo >> /root/.bashrc \
- #   echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
+#   echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
 #    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #RUN brew tap caffix/amass \
@@ -62,7 +62,7 @@ RUN curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/
 
 # Install kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
-    chmod +x kubectl 
+    chmod +x kubectl
 
 # Install Helm
 #RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
@@ -75,11 +75,10 @@ RUN curl -sSL https://github.com/aquasecurity/tfsec/releases/latest/download/tfs
 RUN curl -sSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
     -o /home/ghostbyte/yq && chmod +x /home/ghostbyte/yq
 
-RUN curl https://raw.githubusercontent.com/StEugen/cybersamurai/refs/heads/main/scrap-code/.vimrc -o .vimrc 
-# Enum tools 
+RUN curl https://raw.githubusercontent.com/StEugen/cybersamurai/refs/heads/main/scrap-code/.vimrc -o .vimrc
+# Enum tools
 RUN git clone https://github.com/StEugen/linux-local-enumeration-script.git
 RUN git clone https://github.com/StEugen/LinEnum.git
 
-#RUN chsh -s /bin/zsh ghostbyte 
+#RUN chsh -s /bin/zsh ghostbyte
 ENTRYPOINT ["/bin/zsh"]
-
