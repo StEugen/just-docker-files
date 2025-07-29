@@ -13,6 +13,7 @@ RUN apk update && \
       vim \
       curl \
       nmap \
+      tmux \
       jq \
       git
 
