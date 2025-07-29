@@ -3,7 +3,7 @@ FROM alpine:3.18
 LABEL mainteiner="steugen"
 LABEL description="GhostByte Lightweight: Lightweight DevSecOps Toolkit"
 
-RUN adduser ghostbyte
+RUN adduser -D -s /bin/bash ghostbyte
 
 RUN apk update && \
     apk add --no-cache \
