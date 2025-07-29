@@ -3,7 +3,7 @@ FROM alpine:3.18
 LABEL mainteiner="steugen"
 LABEL description="GhostByte Lightweight: Lightweight DevSecOps Toolkit"
 
-RUN adduser -D -s /bin/bash ghostbyte
+RUN adduser -D -s /bin/bash ghostbyte --home "/home/ghostbyte"
 
 RUN apk update && \
     apk add --no-cache \
@@ -19,7 +19,6 @@ RUN apk update && \
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists.git /opt/SecLists && \
     chown -R ghostbyte:ghostbyte /opt/SecLists
 
-USER ghostbyte
 WORKDIR /home/ghostbyte
 
 RUN curl -L https://go.dev/dl/go1.24.5.linux-amd64.tar.gz -o go.tar.gz && \
@@ -39,4 +38,5 @@ RUN pip3 install --no-cache-dir \
       dnspython \
       requests
 
+USER ghostbyte
 ENTRYPOINT ["bash"]
