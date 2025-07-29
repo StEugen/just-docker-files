@@ -3,12 +3,11 @@ FROM alpine:3.18
 LABEL mainteiner="steugen"
 LABEL description="GhostByte Lightweight: Lightweight DevSecOps Toolkit"
 
-RUN useradd -ms /bin/bash ghostbyte
+RUN adduser -ms /bin/bash ghostbyte
 
 RUN apk update && \
     apk add --no-cache \
-      bash \
-      shadow \
+      bash
       python3 \
       py3-pip \
       vim \
@@ -40,4 +39,4 @@ RUN pip3 install --no-cache-dir \
       dnspython \
       requests
 
-ENTRYPOINT ["sh"]
+ENTRYPOINT ["bash"]
