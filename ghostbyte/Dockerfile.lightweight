@@ -7,6 +7,8 @@ RUN useradd -ms /bin/bash ghostbyte
 
 RUN apk update && \
     apk add --no-cache \
+      bash \
+      shadow \
       python3 \
       py3-pip \
       vim \
