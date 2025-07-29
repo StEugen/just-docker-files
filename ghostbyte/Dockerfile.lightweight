@@ -3,6 +3,8 @@ FROM alpine:3.18
 LABEL mainteiner="steugen"
 LABEL description="GhostByte Lightweight: Lightweight DevSecOps Toolkit"
 
+RUN useradd -ms /bin/bash ghostbyte
+
 RUN apk update && \
     apk add --no-cache \
       python3 \
@@ -14,13 +16,16 @@ RUN apk update && \
       git
 
 
+USER ghostbyte
+WORKDIR /home/ghostbyte
+
 RUN curl -L https://go.dev/dl/go1.24.5.linux-amd64.tar.gz -o go.tar.gz && \
     rm -rf /usr/local/go && \
     tar -xzf go.tar.gz -C /usr/local && \
     rm go.tar.gz
 
-ENV GOPATH=/root/go \
-    PATH=/usr/local/go/bin:/root/go/bin:${PATH}
+ENV GOPATH=/home/ghostbyte/go \
+    PATH=/usr/local/go/bin:/home/ghostbyte/go/bin:${PATH}
 
 RUN go version
 
@@ -30,7 +35,5 @@ RUN go install github.com/OJ/gobuster/v3@latest
 RUN pip3 install --no-cache-dir \
       dnspython \
       requests
-
-WORKDIR /root
 
 ENTRYPOINT ["sh"]
